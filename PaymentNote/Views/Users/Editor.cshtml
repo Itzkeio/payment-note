@@ -1,0 +1,346 @@
+﻿@model PaymentNote.ViewModel.userData
+@{
+    ViewBag.Title = "Editor";
+    var mode = ViewBag.Mode ?? "Create";
+    var user_id = Request.QueryString["id"] ?? "";
+    var db = new PaymentNote.Models.DbPaymentNoteEntities1();
+    bool canManageAdmin = false;
+    var isAdminSession = Session["IsAdmin"] ?? Session["is_admin"];
+    if (isAdminSession is bool)
+    {
+        canManageAdmin = (bool)isAdminSession;
+    }
+    else if (isAdminSession != null)
+    {
+        bool parsed;
+        if (bool.TryParse(isAdminSession.ToString(), out parsed))
+        {
+            canManageAdmin = parsed;
+        }
+    }
+
+    if (!canManageAdmin)
+    {
+        var currentUsername = Session["username"]?.ToString();
+        if (!string.IsNullOrWhiteSpace(currentUsername))
+        {
+            var currentUser = db.Users.FirstOrDefault(u => u.username == currentUsername && u.deleted != true);
+            canManageAdmin = currentUser?.is_admin ?? false;
+        }
+    }
+}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+
+    .select2-dropdown {
+        z-index: 9999;
+    }
+
+
+    .select2-search__field {
+        width: 100% !important;
+        padding: 6px !important;
+    }
+
+
+    .select2-container--default .select2-selection--single {
+        height: calc(2.25rem + 2px);
+        padding: .375rem .75rem;
+    }
+</style>
+
+<section class="content">
+    @using (Html.BeginForm("Editor", "UserData", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="mode" value="@mode" />
+        <input type="hidden" name="user_id" value="@Model.user_id" />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="username" class="col-sm-3 col-form-label form-control-label">Username</label>
+                                        <div class="col-sm-5">
+                                            @if (mode == "View" || mode == "Delete")
+                                            {
+                                                <input type="text" id="username" name="username" class="form-control" value="@Model.username" readonly>
+                                            }
+                                            else
+                                            {
+                                                <input type="text" id="username" name="username" class="form-control" value="@Model.username">
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="Long_Name" class="col-sm-3 col-form-label form-control-label">First Name</label>
+                                        <div class="col-sm-5">
+                                            @if (mode == "View" || mode == "Delete")
+                                            {
+                                                <input type="text" id="first_name" name="first_name" class="form-control" value="@Model.first_name" readonly>
+                                            }
+                                            else
+                                            {
+                                                <input type="text" id="first_name" name="first_name" class="form-control" value="@Model.first_name">
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="isAdmin" class="col-sm-3 col-form-label form-control-label">User Is Admin?</label>
+                                        <div class="col-sm-5">
+                                            <div class="form-check">
+                                                <input type="hidden" name="isAdmin" value="false" />
+                                                <input class="form-check-input" type="checkbox" id="isAdmin" name="isAdmin" value="true" @(Model.isAdmin ? "checked" : "") @(canManageAdmin ? "" : "disabled") />
+                                            </div>
+                                            @if (!canManageAdmin)
+                                            {
+                                                <small class="form-text text-muted">Only admin can change this value.</small>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="password" class="col-sm-3 col-form-label form-control-label">Password</label>
+                                        <div class="col-sm-5">
+                                            <div class="input-group">
+                                                <input type="password" id="Password" name="password" class="form-control" placeholder="@(mode == "Edit" ? "Change Password" : "Enter password")"
+                                                       @(mode == "Edit" ? "" : "required")>
+                                                @if (mode == "Edit")
+                                                {
+                                                    <div class="input-group-append">
+                                                        <div class="input-group-text">
+                                                            <input type="checkbox" id="ChangePassword" name="ChangePassword" />
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Department" class="col-sm-3 col-form-label">Department</label>
+                                        <div class="col-sm-5">
+                                            @if (mode == "View" || mode == "Delete")
+                                            {
+                                                <input type="text" id="Department" name="Department" class="form-control" value="@Model.Department" readonly />
+                                            }
+                                            else
+                                            {
+                                                <select id="Department" name="Department" class="form-control select2">
+                                                    <option value="">Select Department</option>
+                                                    @if (ViewBag.Department != null)
+                                                    {
+                                                        foreach (var dept in ViewBag.Department)
+                                                        {
+                                                            <option value="@dept.Value" @(Model.Department == dept.Value ? "selected" : "")>@dept.Text</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Location" class="col-sm-3 col-form-label">Location</label>
+                                        <div class="col-sm-5">
+                                            @if (mode == "View" || mode == "Delete")
+                                            {
+                                                <input type="text" id="location" name="location" class="form-control" value="@Model.location" readonly />
+                                            }
+                                            else
+                                            {
+                                                <select id="location" name="location" class="form-control select2">
+                                                    <option value="">Select Location</option>
+                                                    @if (ViewBag.Location != null)
+                                                    {
+                                                        foreach (var loc in ViewBag.Location)
+                                                        {
+                                                            <option value="@loc.Value" @((Model.location == loc.Value || Model.location == loc.Text) ? "selected" : "")>@loc.Text</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="button-container">
+                    <div style="display: flex; justify-content: flex-start; gap:10px; margin-top: 15px;">
+                        <div>
+                            <a href="@Url.Action("Index", "UserData")" class="btn btn-secondary">Cancel</a>
+                        </div>
+
+
+                        @if (mode == "Create")
+                        {
+                            <input type="submit" value="Create new User" class="btn btn-success ">
+                        }
+                        else if (mode == "Edit")
+                        {
+                            <input type="submit" value="Update User" class="btn btn-success ">
+                        }
+                        else if (mode == "Delete")
+                        {
+                            <input type="submit" value="Delete User" class="btn btn-danger">
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Select an option",
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('body')
+        });
+        var mode = $('input[name="mode"]').val();
+
+
+        if (mode == "Edit") {
+            $("#Password").prop("readonly", true);
+            $("#Password").prop("disabled", false);
+            $("#ChangePassword").prop("checked", false);
+        }
+        else if (mode == "Create") {
+            $("#Password").prop("readonly", false);
+            $("#Password").prop("disabled", false);
+            $("#ChangePassword").hide();
+            $(".input-group-append").hide();
+        }
+        else if (mode == "Delete" || mode == "View") {
+            $("input:not([type='submit']), select").prop("readonly", true);
+            $("select").attr("disabled", "disabled");
+            $("#isAdmin").prop("disabled", true);
+        }
+
+        if (mode == "Delete") {
+            $("#Password").removeAttr("required");
+        }
+
+        if (@Html.Raw(Model.isAdmin == true ? "true" : "false")) {
+            $("#isAdmin").prop("checked", true);
+        } else {
+            $("#isAdmin").prop("checked", false);
+        }
+
+        $("#ChangePassword").change(function () {
+            if ($(this).is(":checked")) {
+                $("#Password").prop("readonly", false);
+                $("#Password").prop("disabled", false);
+                $("#Password").focus();
+            }
+            else {
+                $("#Password").prop("readonly", true);
+                $("#Password").prop("disabled", true);
+                $("#Password").val("");
+            }
+        });
+
+        
+
+
+        function resetLocationDropdown() {
+            $('#location').empty().append('<option value="">Select Location</option>');
+            $('#location').trigger('change.select2');
+        }
+
+        function updateLocationDropdown(cityName) {
+            if (!cityName) return;
+
+           var currentLocation = '@Model.location';
+            console.log("Fetching locations for city:", cityName);
+            $('#location').empty().append('<option value="">Select Location</option>');
+
+            $.ajax({
+                url: '/DataUser/GetLocationByCity',
+                type: 'GET',
+                data: { cityId: cityName },
+                dataType: 'json',
+                success: function (locations) {
+                    console.log("Received locations:", locations);
+
+                    if (locations && locations.length > 0) {
+                        $.each(locations, function (i, location) {
+                            var isSelected = (location.locationName === currentLocation);
+                            $('#location').append($('<option>', {
+                                value: location.locationName,
+                                text: location.locationName,
+                                selected: isSelected
+                            }));
+                            if (isSelected) {
+                                console.log("Found matching location:", location.locationName);
+                            }
+                        });
+
+                        console.log("Locations loaded successfully");
+                    } else {
+                        console.log('No locations found for the selected city');
+                        if (mode === "Edit" && currentLocation) {
+                            $('#location').append($('<option>', {
+                                value: currentLocation,
+                                text: currentLocation + " (Current)",
+                                selected: true
+                            }));
+                            console.log("Added current location as fallback:", currentLocation);
+                        }
+                    }
+
+                    $('#location').trigger('change');
+                    $('#location').trigger('change.select2');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to load locations:', error);
+                    console.log('Status:', status);
+                    console.log('Response:', xhr.responseText);
+                    if (mode === "Edit" && currentLocation) {
+                        $('#location').append($('<option>', {
+                            value: currentLocation,
+                            text: currentLocation + " (Current)",
+                            selected: true
+                        }));
+                        $('#location').trigger('change.select2');
+                    }
+                }
+            });
+        }
+
+
+
+        $("form").submit(function (e) {
+            if (mode == "Delete") {
+                if (!confirm("Are you sure you want to delete this user?")) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+
+            if (mode == "Edit" && $("#ChangePassword").is(":checked") && $("#Password").val() == "") {
+                alert("Password must be filled");
+                e.preventDefault();
+                return false;
+            }
+        });
+
+    });
+</script>

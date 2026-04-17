@@ -1,0 +1,318 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title -Payment Note </title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback">
+    @Styles.Render("~/Content/Theme/AdminLTE/plugins/fontawesome-free/css/all.min.css")
+    @Styles.Render("~/Content/Theme/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css")
+    @Styles.Render("~/Content/Theme/AdminLTE/dist/css/adminlte.min.css")
+    @Styles.Render("~/Content/Theme/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/Theme/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css")
+    @Styles.Render("~/Content/Theme/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css")
+    @Styles.Render("~/Content/Theme/AdminLTE/plugins/toastr/toastr.min.css")
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+
+
+
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/plugins/jquery/jquery.min.js")"></script>
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/dist/js/adminlte.min.js")"></script>
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/plugins/datatables/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js")"></script>
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/plugins/datatables-buttons/js/dataTables.buttons.min.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @RenderSection("scripts", required: false)
+</head>
+@{
+    var displayUsername = Session["username"]?.ToString();
+    if (string.IsNullOrWhiteSpace(displayUsername))
+    {
+        displayUsername = User?.Identity?.Name;
+    }
+    if (string.IsNullOrWhiteSpace(displayUsername))
+    {
+        displayUsername = "Guest";
+    }
+}
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-user-circle"></i>
+                                <span class="hidden-xs">@displayUsername</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p style="text-align: center">
+                                                <i class="fa fa-2x fa-user-circle"></i>
+                                            </p>
+                                            <p style="text-align: center">
+                                                @displayUsername
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="user-footer">
+                                    <div class="d-flex justify-content-between">
+                                        <button type="button" class="btn btn-primary btn-flat" id="btnChangePassword">Change Password</button>
+
+                                        @using (Html.BeginForm("LogOut", "Auth", FormMethod.Post, new { id = "logoutForm" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default btn-flat bg-red">Log off</a>
+                                        }
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="@Url.Action("Index", "Home")" class="brand-link">
+                <span class="brand-text font-weight-bold">Payment Note</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- SidebarSearch Form -->
+                @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "form-inline" }))
+
+                {
+                    <div class="input-group" data-widget="sidebar-search">
+                        @Html.TextBox("searchQuery", null, new
+                        {
+                            @class = "form-control form-control-sidebar",
+                            type = "search",
+                            placeholder = "Search",
+                            aria_label = "Search"
+                        })
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar" type="submit">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Home")" class="nav-link active">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                        <li class="nav-item menu-is-opening menu-open">
+                            <a href="@Url.Action("Index", "Home")" class="nav-link">
+                                <i class="nav-icon fas fa-archive"></i>
+                                <p>
+                                    Master Data
+                                </p>
+                                <i class="right fas fa-angle-left"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "UserData")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>User</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "Department")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Department</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "Location")" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Location</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                       
+                    </ul>
+                </nav>
+                <!-- Tambahkan menu lain sesuai kebutuhan -->
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">@ViewBag.Title</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="box-body with-border" style="min-height:100%;min-width:100%">
+                        @RenderBody()
+
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <footer class="main-footer">
+            <strong>&copy; @DateTime.Now.Year - Payment Note</strong>
+        </footer>
+    </div>
+
+    <div id="ModalChangePassword" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Change Password</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3" for="changePassOld">Old Password</label>
+                            <div class="col-md-7">
+                                <input type="password" id="changePassOld" name="changePassOld" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3" for="changePassNew">New Password</label>
+                            <div class="col-md-7">
+                                <input type="password" id="changePassNew" name="changePassNew" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-md-3" for="changePassConfirm">Confirm New Password</label>
+                            <div class="col-md-7">
+                                <input type="password" id="changePassConfirm" name="changePassConfirm" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn-flat" id="btnConfirmChangePassword">Change Password</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#btnChangePassword").click(function () {
+                $("#changePassOld").val("");
+                $("#changePassNew").val("");
+                $("#changePassConfirm").val("");
+                $("#ModalChangePassword").modal("show");
+            });
+
+     $("#btnConfirmChangePassword").click(function() {
+            var oldPassword = $("#changePassOld").val();
+            var newPassword = $("#changePassNew").val();
+            var confirmPassword = $("#changePassConfirm").val();
+
+
+            if (!oldPassword) {
+                toastr.error("Old Password is required");
+                return;
+            }
+
+            if (!newPassword) {
+                toastr.error("New Password is required");
+                return;
+            }
+
+            if (!confirmPassword) {
+                toastr.error("Confirm Password is required")    ;
+                return;
+            }
+
+            if (newPassword != confirmPassword) {
+                toastr.error("Confirm Password is different from New Password");
+                return;
+            }
+
+
+            $(this).prop('disabled', true);
+            $(this).html('<i class="fa fa-spinner fa-spin"></i> Processing...');
+
+            var data = {
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+                confirmPassword: confirmPassword
+            };
+
+
+            $.ajax({
+                url: "@Url.Action("ChangePassword", "UserData")",
+                type: "POST",
+                data: data,
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $("#ModalChangePassword").modal("hide");
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    toastr.error("An error occurred: " + error);
+                },
+                complete: function() {
+
+                    $("#btnConfirmChangePassword").prop('disabled', false);
+                    $("#btnConfirmChangePassword").html('Change Password');
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>

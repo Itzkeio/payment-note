@@ -1,0 +1,156 @@
+﻿@model PaymentNote.ViewModel.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback">
+    <!-- Font Awesome -->
+    @Styles.Render("~/Content/Theme/AdminLTE/plugins/fontawesome-free/css/all.min.css")
+    <!-- icheck bootstrap -->
+    @Styles.Render("~/Content/Theme/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css")
+    <!-- Theme style -->
+    @Styles.Render("~/Content/Theme/AdminLTE/dist/css/adminlte.min.css")
+
+
+    <style>
+        .alert-custom {
+            background-color: #fff;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+            border-left: 4px solid #dc3545;
+            padding: 12px;
+            width: 100%;
+        }
+
+        .validation-summary-errors {
+            color: #dc3545;
+            font-weight: bold;
+            padding: 0;
+            margin: 0;
+            list-style-position: inside;
+            width: 100%;
+        }
+
+            .validation-summary-errors ul {
+                padding-left: 0;
+                margin-bottom: 0;
+                list-style-type: none;
+            }
+
+            .validation-summary-errors li {
+                margin-bottom: 5px;
+            }
+
+                .validation-summary-errors li:before {
+                    content: "⚠️ ";
+                }
+
+        .field-validation-error {
+            color: #dc3545;
+            display: block;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            padding: 4px 8px;
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 3px solid #dc3545;
+            border-radius: 2px;
+            width: 100%;
+        }
+    </style>
+
+
+</head>
+<body class="login-page" style="min-height: 464.762px;">
+    <div class="login-box">
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a href="@Url.Action("Index", "Home")" class="h1"><b>Payment</b>Note</a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">Sign in</p>
+
+                @using (Html.BeginForm("Login", "Auth", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+
+                    if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-custom" role="alert">
+                            <ul class="mb-0">
+                                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                            </ul>
+                        </div>
+                    }
+
+
+                    <div class="input-group mb-3">
+                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Username", type = "text" })
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                    <div class="input-group mb-3">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", id = "passwordInput" })
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="showPassword">
+                                <label for="showPassword">
+                                    Show Password
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/plugins/jquery/jquery.min.js")"></script>
+    <!-- Bootstrap 4 -->
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <!-- AdminLTE App -->
+    <script src="@Url.Content("~/Content/Theme/AdminLTE/dist/js/adminlte.min.js")"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#showPassword').on('change', function () {
+                var passwordInput = $('#passwordInput');
+                if (this.checked) {
+                    passwordInput.attr('type', 'text');
+                } else {
+                    passwordInput.attr('type', 'password');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "Location List";
+}
+
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Editor", "Location", new { mode = "Create" })">
+                    <i class="fas fa-plus"></i>
+                    Create New Location
+                </a>
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="input-group input-group-sm mr-2" style="width: 150px;">
+                        <input type="text" id="tableSearch" class="form-control" placeholder="Search" />
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table id="locationTable" class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th>Location Code</th>
+                        <th>Location Name</th>
+                        <th style="text-align: center">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.location_code</td>
+                            <td>@item.location_name</td>
+
+                            <td>
+                                <div class="project-actions text-center">
+                                    <a href="@Url.Action("Editor", "Location", new { id = item.location_code, mode = "View" })" class="btn btn-info btn-sm">
+                                        <i class="fa fa-eye"></i> View
+                                    </a>
+                                    <a href="@Url.Action("Editor", "Location",  new { id = item.location_code, mode = "Edit" })" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </a>
+                                    <a href="@Url.Action("Editor", "Location", new { id =item.location_code, mode = "Delete" })" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th> Location Code </th>
+                        <th> Location Name </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        $('#locationTable tfoot th').each(function () {
+            var i = $(this).index();
+            if (i != 3) {
+                var title = $(this).text().trim();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            }
+        });
+
+        var table = $('#locationTable').DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "lengthMenu": [[10, 25, 50, 100, 500, 1000, -1], [10, 25, 50, 100, 500, 1000, "All"]],
+            "pageLength": 10,
+            "autoWidth": false,
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "dom": 'lBrtip',
+            "stateSave": false
+        });
+
+        table.columns().every(function (i) {
+            var that = this;
+            if (i < 3) {
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
+            }
+        });
+
+                $("#tableSearch").on("keyup", function () {
+            table.search(this.value).draw();
+        });
+                    $("#tableSearch").on("keyup", function () {
+                        table.search(this.value).draw();
+                    });
+
+                    @if (TempData["SuccessMassage"]!= null)
+{
+                        <text>
+                    toastr.success('@TempData["SuccessMassage"]');
+                            </text>
+}
+                            @if (TempData["ErrorMassage"]!= null)
+{
+                    <text>
+                    toastr.error('@TempData["ErrorMassage"]');
+                            </text>
+}
+                        
+    });
+</script>
+
