@@ -36,6 +36,15 @@
     {
         displayUsername = "Guest";
     }
+
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    Func<string, string, string> IsActive = (controller, action) =>
+        currentController == controller && currentAction == action ? "active" : "";
+
+    Func<string, string> IsActiveController = (controller) =>
+        currentController == controller ? "active" : "";
 }
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -124,7 +133,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="@Url.Action("Index", "Home")" class="nav-link active">
+                            <a href="@Url.Action("Index", "Home")" class="nav-link @IsActive("Home", "Index")">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -133,8 +142,8 @@
                         </li>
 
                         <li class="nav-item">
-                        <li class="nav-item menu-is-opening menu-open">
-                            <a href="@Url.Action("Index", "Home")" class="nav-link">
+                        <li class="nav-item @(currentController == "UserData" || currentController == "Department" || currentController == "Location" ? "menu-is-opening menu-open" : "")">
+                            <a href="#" class="nav-link @(currentController == "UserData" || currentController == "Department" || currentController == "Location" ? "active" : "")">
                                 <i class="nav-icon fas fa-archive"></i>
                                 <p>
                                     Master Data
@@ -143,26 +152,26 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="@Url.Action("Index", "UserData")" class="nav-link">
+                                    <a href="@Url.Action("Index", "UserData")" class="nav-link @IsActiveController("UserData")">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>User</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="@Url.Action("Index", "Department")" class="nav-link">
+                                    <a href="@Url.Action("Index", "Department")" class="nav-link @IsActiveController("Department")">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Department</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="@Url.Action("Index", "Location")" class="nav-link">
+                                    <a href="@Url.Action("Index", "Location")" class="nav-link @IsActiveController("Location")">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Location</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                       
+
                     </ul>
                 </nav>
                 <!-- Tambahkan menu lain sesuai kebutuhan -->
@@ -313,6 +322,6 @@
             });
         });
     });
-    </script>
+    </style>
 </body>
 </html>
