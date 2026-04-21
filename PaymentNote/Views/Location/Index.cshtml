@@ -56,7 +56,7 @@
                                         <i class="fa fa-edit"></i> Edit
                                     </a>
                                     <a href="@Url.Action("Editor", "Location", new { id =item.location_code, mode = "Delete" })" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-trash"></i> Delete
+                                        <i class="fa fa-trash"></i> Delete  
                                     </a>
                                 </div>
                             </td>
@@ -76,6 +76,15 @@
 
 <script>
     $(function () {
+        @if (TempData["SuccessMessage"] != null || TempData["SuccessMassage"] != null)
+        {
+            <text>toastr.success('@(TempData["SuccessMessage"] ?? TempData["SuccessMassage"])');</text>
+        }
+        @if (TempData["ErrorMessage"] != null || TempData["ErrorMassage"] != null)
+        {
+            <text>toastr.error('@(TempData["ErrorMessage"] ?? TempData["ErrorMassage"])');</text>
+        }
+
         $('#locationTable tfoot th').each(function () {
             var i = $(this).index();
             if (i != 3) {
@@ -109,26 +118,10 @@
             }
         });
 
-                $("#tableSearch").on("keyup", function () {
+        $("#tableSearch").on("keyup", function () {
             table.search(this.value).draw();
         });
-                    $("#tableSearch").on("keyup", function () {
-                        table.search(this.value).draw();
-                    });
 
-                    @if (TempData["SuccessMassage"]!= null)
-{
-                        <text>
-                    toastr.success('@TempData["SuccessMassage"]');
-                            </text>
-}
-                            @if (TempData["ErrorMassage"]!= null)
-{
-                    <text>
-                    toastr.error('@TempData["ErrorMassage"]');
-                            </text>
-}
-                        
     });
 </script>
 

@@ -78,6 +78,15 @@
 
 <script>
     $(function () {
+        @if (TempData["SuccessMessage"] != null || TempData["Success"] != null)
+        {
+            <text>toastr.success('@(TempData["SuccessMessage"] ?? TempData["Success"])');</text>
+        }
+        @if (TempData["ErrorMessage"] != null || TempData["Error"] != null)
+        {
+            <text>toastr.error('@(TempData["ErrorMessage"] ?? TempData["Error"])');</text>
+        }
+
         // Buat input search di setiap header tfoot
         $('#departmentTable tfoot th').each(function () {
             var title = $(this).text().trim();
@@ -111,20 +120,6 @@
         $('#tableSearch').on("keyup", function () {
             table.search(this.value).draw();
         });
-
-        @if (TempData["SuccessMessage"] != null)
-            {
-                    <text>
-        toastr.success('@TempData["SuccessMessage"]');
-                    </text>
-            }
-        @if(TempData["ErrorMessage"] != null)
-            {
-                <text>
-        toastr.error('@TempData["ErrorMessage"]');
-                </text>
-            }
-
     })
 </script>
 

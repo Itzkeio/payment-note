@@ -103,6 +103,15 @@
 
 <script>
     $(function () {
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>toastr.success('@TempData["SuccessMessage"]');</text>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>toastr.error('@TempData["ErrorMessage"]');</text>
+        }
+
         $('#userTable tfoot th').each(function () {
             var i = $(this).index();
             if (i != 6) {
@@ -139,14 +148,5 @@
         $("#tableSearch").on("keyup", function () {
             table.search(this.value).draw();
         });
-
-        @if (TempData["SucessMessage"] != null)
-            {
-                 <text> toastr.success('@TempData["SuccessMessage"]'); </text>
-            }
-        @if (TempData["ErrorMessage"] != null)
-            {
-            <text> toastr.error('@TempData["ErrorMassage"]'); </text>
-            }
     });
 </script>
