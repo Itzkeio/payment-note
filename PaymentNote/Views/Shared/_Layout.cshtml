@@ -39,6 +39,7 @@
 
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var masterDataControllers = new[] { "UserData", "Department", "Location", "Company", "Currency", "Vendor", "PoType", "Po_type" };
 
     Func<string, string, string> IsActive = (controller, action) =>
         currentController == controller && currentAction == action ? "active" : "";
@@ -141,9 +142,8 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                        <li class="nav-item @(currentController == "UserData" || currentController == "Department" || currentController == "Location" ? "menu-is-opening menu-open" : "")">
-                            <a href="#" class="nav-link @(currentController == "UserData" || currentController == "Department" || currentController == "Location" ? "active" : "")">
+                        <li class="nav-item @(masterDataControllers.Contains(currentController) ? "menu-is-opening menu-open" : "")">
+                            <a href="#" class="nav-link @(masterDataControllers.Contains(currentController) ? "active" : "")">
                                 <i class="nav-icon fas fa-archive"></i>
                                 <p>
                                     Master Data
@@ -169,9 +169,49 @@
                                         <p>Location</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "Company")" class="nav-link @IsActiveController("Company")">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Company</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "Currency")" class="nav-link @IsActiveController("Currency")">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Currency</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "Vendor")" class="nav-link @IsActiveController("Vendor")">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Vendor</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "PoType")" class="nav-link @IsActiveController("PoType")">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>PO Type</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
-
+                        <li class="nav-item menu-is-opening menu-open">
+                            <a href="@Url.Action("Index", "Home")" class="nav-link">
+                                <i class="nav-icon fas fa-credit-card"></i>
+                                <p>
+                                    Transaction
+                                </p>
+                                <i class="right fas fa-angle-left"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "UserData")" class="nav-link @IsActiveController("UserData")">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Transaction Detail</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
                 <!-- Tambahkan menu lain sesuai kebutuhan -->

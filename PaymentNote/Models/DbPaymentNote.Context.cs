@@ -29,5 +29,10 @@ namespace PaymentNote.Models
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Users_Backup> Users_Backup { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
+        public virtual DbSet<Currency> Currencies { get; set; }
+        public virtual DbSet<po_type> po_type { get; set; }
+        public virtual DbSet<Vendor> Vendors { get; set; }
+        public virtual DbSet<TransactionDetail> TransactionDetails { get; set; }
     }
 }

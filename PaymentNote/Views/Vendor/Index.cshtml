@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "Vendor List";
+}
+
+
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Editor", "Vendor", new { mode = "Create" })">
+                    <i class="fas fa-plus"></i>
+                    Create New Location
+                </a>
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="input-group input-group-sm mr-2" style="width: 150px;">
+                        <input type="text" id="tableSearch" class="form-control" placeholder="Search" />
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table id="vendorTable" class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th>Vendor Semesta Code</th>
+                        <th>Vendor SAP Code</th>
+                        <th>Vendor Description</th>
+                        <th style="text-align: center">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.vendor_semesta_code</td>
+                            <td>@item.vendor_sap_code</td>
+                            <td>@item.vendor_desc</td>
+
+                            <td>
+                                <div class="project-actions text-center">
+                                    <a href="@Url.Action("Editor", "Vendor", new { id = item.vendor_semesta_code, mode = "View" })" class="btn btn-info btn-sm">
+                                        <i class="fa fa-eye"></i> View
+                                    </a>
+                                    <a href="@Url.Action("Editor", "Vendor",  new { id = item.vendor_semesta_code, mode = "Edit" })" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </a>
+                                    <a href="@Url.Action("Editor", "Vendor", new { id =item.vendor_semesta_code, mode = "Delete" })" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th> Vendor Semesta Code </th>
+                        <th> Vendor SAP Code </th>
+                        <th>Vendor description</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            newestOnTop: true,
+            timeOut: 2500
+        };
+
+        @if (TempData["Success"] != null || TempData["SuccessMessage"] != null)
+        {
+            <text>toastr.success('@(TempData["Success"] ?? TempData["SuccessMessage"])');</text>
+        }
+        @if (TempData["Error"] != null || TempData["ErrorMessage"] != null)
+        {
+            <text>toastr.error('@(TempData["Error"] ?? TempData["ErrorMessage"])');</text>
+        }
+
+        $('#vendorTable tfoot th').each(function () {
+            var i = $(this).index();
+            if (i != 3) {
+                var title = $(this).text().trim();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            }
+        });
+
+        var table = $('#vendorTable').DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "lengthMenu": [[10, 25, 50, 100, 500, 1000, -1], [10, 25, 50, 100, 500, 1000, "All"]],
+            "pageLength": 10,
+            "autoWidth": false,
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "dom": 'lBrtip',
+            "stateSave": false
+        });
+
+        table.columns().every(function (i) {
+            var that = this;
+            if (i < 3) {
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
+            }
+        });
+
+        $("#tableSearch").on("keyup", function () {
+            table.search(this.value).draw();
+        });
+
+    });
+</script>

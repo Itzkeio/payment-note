@@ -1,0 +1,109 @@
+﻿@model global::PaymentNote.ViewModel.CompanyViewModel
+@{
+    ViewBag.Title = "Editor";
+    var mode = ViewBag.Mode ?? "Create";
+}
+
+<section class="content">
+    @using (Html.BeginForm("Editor", "Company", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.deleted)
+        <input type="hidden" name="mode" value="@mode" />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="row justify-content-center">
+                        <div class="col col-md-8">
+                            <div class="form-group row">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="company_code" class="col-sm-2 col-form-label form-control-label">Company Code</label>
+                                        <div class="col-sm-2">
+                                            @if (mode == "Create")
+                                            {
+                                                @Html.TextBoxFor(model => model.company_code, new { @class = "form-control", @placeholder = "Company Code", required = "required" })
+                                            }
+                                            else
+                                            { @Html.TextBoxFor(model => model.company_code, new { @class = "form-control", @placeholder = "Company Code", required = "required", @readonly = "readonly" })
+
+                                        }@Html.ValidationMessageFor(model => model.company_code, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="company_description" class="col-sm-2">Company Description</label>
+                                    <div class="col-sm-2">
+                                        @if (mode == "View" || mode == "Delete")
+                                        {
+                                            @Html.TextBoxFor(model => model.company_description, new { @class = "form-control", @placeholder = "Company Description", required = "required", @readonly = "readonly" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(model => model.company_description, new { @class = "form-control", @placeholder = "Company Description", required = "required" })
+                                        }
+                                        @Html.ValidationMessageFor(model => model.company_description, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="button-container">
+                <div style="display: flex; justify-content: flex-start; gap:10px; margin-top: 15px;">
+                    <div>
+                        <a href="@Url.Action("Index", "Company")" class="btn btn-secondary">Cancel</a>
+                    </div>
+                    @if (mode == "Create")
+                    {
+                        <input type="submit" value="Create" class="btn btn-success" />
+                    }
+                    else if (mode == "Edit")
+                    {
+                        <input type="submit" value="Save" class="btn btn-success">
+                    }
+                    else if (mode == "Delete")
+                    {
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</section>
+
+<script>
+    $(document).ready(function () {
+        $("form").submit(function (e) {
+            var companyCode = $("company_code").val();
+            var company_descriptipn = $("company_description").val();
+            var mode = $("input[name='mode']").val();
+        });
+
+        if (!company_code || !company_description) {
+            alert("Please fill all required field");
+            e.preventDefault();
+            return false;
+        }
+
+        if (mode == "Delete") {
+            if (!confirm("Are you sure want to delete this Departement?")) {
+                e.preventDefault();
+                return false;
+            }
+        }
+
+         if ('@TempData["SuccessMessage"]' != '') {
+            toastr.success('@TempData["SuccessMessage"]');
+            }
+         if ('@TempData["ErrorMessage"]' != '') {
+         toastr.error('@TempData["ErrorMessage"]');
+            });
+</script>

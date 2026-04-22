@@ -1,0 +1,109 @@
+﻿@model global::PaymentNote.ViewModel.CurrencyViewModel
+@{
+    ViewBag.Title = "Editor";
+    var mode = ViewBag.Mode ?? "Create";
+}
+
+<section class="content">
+    @using (Html.BeginForm("Editor", "Currency", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.deleted)
+        <input type="hidden" name="mode" value="@mode" />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="ccy_code" class="col-sm-2 col-form-label form-control-label">Currency Code</label> 
+                                        <div class="col-sm-2">
+                                            @if (mode == "Create")
+                                            {
+                                                @Html.TextBoxFor(model => model.ccy_code, new { @class = "form-control", @placeholder = "Currency Code", required = "required" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.ccy_code, new { @class = "form-control", @placeholder = "Currency Code", required = "required", @readonly = "readonly" })
+                                            }@Html.ValidationMessageFor(model => model.ccy_code, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="ccy_description" class="col-sm-2">Currency Description</label>
+                                        <div class="col-sm-2">
+                                            @if (mode == "View" || mode == "Delete")
+                                            {
+                                                @Html.TextBoxFor(model => model.ccy_description, new { @class = "form-control", @placeholder = "Currency Description", required = "required", @readonly = "readonly" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.ccy_description, new { @class = "form-control", @placeholder = "Currency Description", required = "required" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.ccy_description, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="button-container">
+                    <div style="display: flex; justify-content: flex-start; gap:10px; margin-top: 15px;">
+                        <div>
+                            <a href="@Url.Action("Index", "Currency")" class="btn btn-secondary">Cancel</a>
+                        </div>
+                        @if (mode == "Create")
+                        {
+                            <input type="submit" value="Create" class="btn btn-success" />
+                        }
+                        else if (mode == "Edit")
+                        {
+                            <input type="submit" value="Save" class="btn btn-success">
+                        }
+                        else if (mode == "Delete")
+                        {
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    $(document).ready(function () {
+        $("form").submit(function (e) {
+            var ccy_code = $("ccy_code").val();
+            var ccy_description = $("ccy_description").val();
+            var mode = $("input[name='mode']").val();
+        });
+
+        if (!ccy_code || !ccy_description) {
+            alert("Please fill all required field");
+            e.preventDefault();
+            return false;
+        }
+
+        if (mode == "Delete") {
+            if (!confirm("Are you sure want to delete this Departement?")) {
+                e.preventDefault();
+                return false;
+            }
+        }
+
+         if ('@TempData["SuccessMessage"]' != '') {
+            toastr.success('@TempData["SuccessMessage"]');
+            }
+         if ('@TempData["ErrorMessage"]' != '') {
+         toastr.error('@TempData["ErrorMessage"]');
+            });
+</script>

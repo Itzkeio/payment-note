@@ -1,0 +1,143 @@
+﻿@model global::PaymentNote.ViewModel.VendorViewModel
+@{
+    var mode = ViewBag.Mode ?? "Create";
+    ViewBag.Title = @mode + " - Editor";
+}
+
+<section class="content">
+    @using (Html.BeginForm("Editor", "Vendor", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.deleted)
+        <input type="hidden" name="mode" value="@mode" />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-priamry">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="card-body">
+
+                                    <div class="form-check-group row">
+                                        <label for="vendor_semesta_code" class="col-sm-2 col-form-label form-control-label">Vendor Semesta Code</label>
+                                        <div class="col-sm-3">
+                                            @if (mode == "Create")
+                                            {
+                                                @Html.TextBoxFor(model => model.vendor_semesta_code, new { @class = "form-control", @placeholder = "Vendor Semesta Code", required = "required" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.vendor_semesta_code, new { @class = "form-control", @placeholder = "Vendor Semesta Code", required = "required", @readonly = "readonly" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.vendor_semesta_code, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check-group row">
+                                        <label for="vendor_sap_code" class="col-sm-2 col-form-label form-control-label">Vendor SAP Code</label>
+                                        <div class="col-sm-3">
+                                            @if (mode == "Create")
+                                            {
+                                                @Html.TextBoxFor(model => model.vendor_sap_code, new { @class = "form-control", @placeholder = "Vendor SAP Code", required = "required" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.vendor_sap_code, new { @class = "form-control", @placeholder = "Vendor SAP Code", required = "required", @readonly = "readonly" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.vendor_sap_code, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="vendor_description" class="col-sm-2 col-form-label form-control-label">Vendor Description</label>
+                                        <div class="col-sm-3">
+                                            @if (mode == "View" || mode == "Delete")
+                                            {
+                                                @Html.TextBoxFor(model => model.vendor_desc, new { @class = "form-control", @placeholder = "Vendor Name", required = "required", @readonly = "readonly" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.vendor_desc, new { @class = "form-control", @placeholder = "Vendor Name", required = "required" })
+                                            }
+                                            @Html.ValidationMessageFor(model => model.vendor_desc, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="button-container">
+                    <div style="display: flex; justify-content: flex-start; gap:10px; margin-top: 15px;">
+                        <div>
+                            <a href="@Url.Action("Index", "Vendor")" class="btn btn-secondary">Cancel</a>
+                        </div>
+
+                        @if (mode == "Create")
+                        {
+                            <input type="submit" value="Create" class="btn btn-success">
+                        }
+                        else if (mode == "Edit")
+                        {
+                            <input type="submit" value="Save" class="btn btn-success">
+                        }
+                        else if (mode == "Delete")
+                        {
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+<script>
+    $(document).ready(function () {
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            newestOnTop: true,
+            timeOut: 2000
+        };
+
+        $("form").submit(function (e) {
+            var vendor_semesta_code = $("#vendor_semesta_code").val();
+            var vendor_sap_code = $("#vendor_sap_code").val();
+            var vendor_desc = $("#vendor_desc").val();
+            var mode = $("input[name='mode']").val();
+
+            if (!vendor_semesta_code || !vendor_sap_code || !vendor_desc) {
+                alert("Please fill all required field");
+                e.preventDefault();
+                return false;
+            }
+
+            if (mode == "Delete") {
+                if (!confirm("Are you sure want to delete this Vendor?")) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+
+            var actionText = mode == "Delete" ? "Deleting" : "Saving";
+            toastr.info(actionText + " vendor data...");
+            $(this).find(':submit').prop('disabled', true);
+        });
+
+         if ('@TempData["SuccessMessage"]' != '') {
+        toastr.success('@TempData["SuccessMessage"]');
+    }
+    if ('@TempData["ErrorMessage"]' != '') {
+        toastr.error('@TempData["ErrorMessage"]');
+    }
+    });
+</script>
+

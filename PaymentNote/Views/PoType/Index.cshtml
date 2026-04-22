@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "PO Type";
+}
+
+<section class="content">
+    <div class="card">
+        <div class="card-header d-flex align-items-center">
+            <a class="btn btn-primary btn-sm" href="@Url.Action("Editor", "PoType", new {mode = "Create"})">
+                <i class="fa fa-plus"></i>
+                Create
+            </a>
+            <div class="ml-auto d-flex align-items-center">
+                <div class="input-group input-group-sm mr-2" style="width: 200px;">
+                    <input type="text" id="tableSearch" class="form-control" placeholder="Search..." />
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div>
+                </div>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table id="PoTypeTable" class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 15%">
+                            Type Code
+                        </th>
+                        <th style="width: 20%">
+                            Type Description
+                        </th>
+                        <th style="width: 15%; text-align: center">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.type_code</td>
+                            <td>@item.type_desc</td>
+                            <td>
+                                <div class="project-actions text-center">
+                                    <a href="@Url.Action("Editor", "PoType", new {id = item.type_code, mode="View"})" class="btn btn-info btn-sm">
+                                        <i class="fa fa-eye"></i> View
+                                    </a>
+                                    <a href="@Url.Action("Editor", "PoType",  new { id = item.type_code, mode = "Edit" })" class="btn btn-warning btn-sm">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </a>
+                                    <a href="@Url.Action("Editor", "PoType",  new { id = item.type_code, mode = "Delete" })" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Type Code</th>
+                        <th>Type Description</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        @if (TempData["SuccessMessage"] != null || TempData["Success"] != null)
+        {
+            <text>toastr.success('@(TempData["SuccessMessage"] ?? TempData["Success"])');</text>
+        }
+        @if (TempData["ErrorMessage"] != null || TempData["Error"] != null)
+        {
+            <text>toastr.error('@(TempData["ErrorMessage"] ?? TempData["Error"])');</text>
+        }
+
+        // Buat input search di setiap header tfoot
+        $('#PoTypeTable tfoot th').each(function () {
+            var title = $(this).text().trim();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        });
+
+        var table = $('#PoTypeTable').DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "lengthMenu": [[10, 25, 50, 100, 500, 1000, -1], [10, 25, 50, 100, 500, 1000, "All"]],
+            "pageLength": 10,
+            "autoWidth": false,
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "dom": 'lBrtip',
+            "stateSave": false
+        });
+
+        // Setup input search di tfoot untuk filter per kolom
+        table.columns().every(function (i) {
+            var that = this;
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                }
+            });
+        });
+
+        $('#tableSearch').on("keyup", function () {
+            table.search(this.value).draw();
+        });
+    })
+</script>
