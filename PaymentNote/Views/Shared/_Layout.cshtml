@@ -205,9 +205,15 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="@Url.Action("Index", "UserData")" class="nav-link @IsActiveController("UserData")">
+                                    <a href="@Url.Action("Index", "Operational")" class="nav-link @IsActiveController("Operational")">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Transaction Detail</p>
+                                        <p>Operational</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("Index", "Invoice")" class="nav-link @IsActiveController("Invoice")">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Invoice</p>
                                     </a>
                                 </li>
                             </ul>
@@ -247,7 +253,7 @@
         <!-- /.content-wrapper -->
 
         <footer class="main-footer">
-            <strong>&copy; @DateTime.Now.Year - Payment Note</strong>
+            <strong>&copy; @DateTime.Now.Year - Payment Monitoring</strong>
         </footer>
     </div>
 

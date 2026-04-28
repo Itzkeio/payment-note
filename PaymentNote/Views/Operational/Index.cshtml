@@ -1,0 +1,387 @@
+﻿@model IEnumerable<PaymentNote.Models.Operational>
+
+@{
+    ViewBag.Title = "Operational";
+
+
+    var vendorDict = ViewBag.VendorDict as Dictionary<int, string> ?? new Dictionary<int, string>();
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<style>
+    #transactionDataTable {
+        width: 100% !important;
+    }
+</style>
+
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Editor", "Operational", new { mode = "Create" })">
+                    <i class="fa fa-plus"></i>
+                    Create
+                </a>
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="input-group input-group-sm mr-2" style="width:200px;">
+                        <input type="text" id="tableSearch" class="form-control" placeholder="Search..." />
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show m-2" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show m-2" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="card-body table-responsive p-0">
+            <table id="transactionDataTable" class="table table-hover text-nowrap">
+                <thead>
+                    <tr>
+                        <th>PO ID</th>
+                        <th>PO No</th>
+                        <th>Company</th>
+                        <th>Currency</th>
+                        <th>Rate</th>
+                        <th>Vendor</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                        <th>Remarks</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionDetailTable">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            var activeDetails = item.OperationalDetails
+                                .Where(d => d.deleted != true)
+                                .OrderBy(d => d.detail_id)
+                                .ToList();
+                            var firstPoNo = activeDetails.Select(d => d.po_no).FirstOrDefault();
+                            var detailCount = activeDetails.Count;
+                            <tr>
+                                <td>@item.po_id</td>
+                                <td>
+                                    @if (detailCount == 0)
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                    else
+                                    {
+                                        foreach (var poNo in activeDetails.Select(d => d.po_no))
+                                        {
+                                            <div>@poNo</div>
+                                        }
+                                    }
+                                </td>
+                                <td>@item.company_code</td>
+                                <td>@item.currency</td>
+                                <td>@item.currency_rate</td>
+                                <td>
+                                 @(item.vendor.HasValue && vendorDict.ContainsKey(item.vendor.Value)
+                                ? vendorDict[item.vendor.Value]
+                                : "—")
+                                </td>
+                                <td><span class="@GetStatusClass(item.status)">@item.status</span></td>
+                                <td>
+                                    @if (detailCount > 0)
+                                    {
+                                        <span class="badge badge-info">@detailCount items</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
+                                <td>@item.Remarks</td>
+                                <td>@(item.created_at?.ToString("yyyy-MM-dd"))</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="@Url.Action("Editor", "Operational")?id=@Html.Raw(item.po_id)&mode=View"
+                                           class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Editor", "Operational")?id=@Html.Raw(item.po_id)&mode=Edit"
+                                           class="btn btn-primary btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="@Url.Action("Editor", "Operational")?id=@Html.Raw(item.po_id)&mode=Delete"
+                                           class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                        <a href="@Url.Action("Editor", "Operational")?id=@Html.Raw(item.po_id)&mode=SendToAP"
+                                           class="btn btn-info btn-sm">
+                                            <i class="fas fa-paper-plane mr-1"></i>Send To AP
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11" class="text-center">No Data found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@functions {
+    public string GetStatusClass(string status)
+    {
+        if (string.IsNullOrEmpty(status)) return "";
+        switch (status)
+        {
+            case "New": return "badge badge-primary";
+            case "Send to AP": return "badge badge-success";
+            case "Cancel": return "badge badge-warning";
+            default: return "badge badge-light";
+        }
+    }
+}
+
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    var transactionTable;
+
+    $(document).ready(function () {
+        initializeDataTable();
+
+        $('#tableSearch').on('keyup', function () {
+            if (transactionTable) {
+                transactionTable.search($(this).val()).draw();
+            }
+        });
+
+        //refreshTransactionTable();
+
+        // Auto-hide alert setelah 4 detik
+        setTimeout(function () {
+            $('.alert-dismissible').fadeOut(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+    });
+
+    function initializeDataTable() {
+        if ($.fn.DataTable.isDataTable('#transactionDataTable')) {
+            $('#transactionDataTable').DataTable().destroy();
+        }
+
+        var columnCount = $('#transactionDataTable thead tr th').length;
+
+        $('#transactionDataTable tbody tr').each(function () {
+            var actualColumns = $(this).find('td').length;
+            if (actualColumns < columnCount) {
+                for (var i = actualColumns; i < columnCount; i++) {
+                    $(this).append('<td></td>');
+                }
+            }
+        });
+
+        var $body = $('#transactionDetailTable');
+        if ($body.find('tr').length === 0 ||
+            ($body.find('tr').length === 1 && $body.find('tr td').attr('colspan'))) {
+
+            if ($body.find('tr').length === 0) {
+                $body.html('<tr><td colspan="' + columnCount + '" class="text-center">No Data found</td></tr>');
+            } else {
+                $body.find('tr td').attr('colspan', columnCount);
+            }
+        }
+
+        transactionTable = $('#transactionDataTable').DataTable({
+            responsive: true,
+            "lengthChange": true,
+            "lengthMenu": [[10, 25, 50, 100, 500, 1000, -1], [10, 25, 50, 100, 500, 1000, "All"]],
+            "pageLength": 25,
+            "dom": 'lBrtip',
+            "processing": true,
+            "serverSide": false,
+            autoWidth: false,
+            scrollX: false,
+            scrollCollapse: false,
+            "deferRender": true,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fas fa-file-excel"></i> Export to Excel',
+                    title: 'Operational List_' + new Date().toISOString().slice(0, 10),
+                    className: 'btn btn-success btn-sm',
+                    exportOptions: {
+                        columns: ':visible:not(:last-child)'
+                    }
+                }
+            ],
+            language: {
+                search: "",
+                lengthMenu: "Show _MENU_ entries",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "No data available",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Next",
+                    previous: "Previous"
+                }
+            }
+        });
+
+        return transactionTable;
+    }
+
+    function refreshTransactionTable() {
+        $.ajax({
+            url: '@Url.Action("GetOperationalData", "Operational")',
+            type: 'GET',
+            success: function (data) {
+                $("#transactionDetailTable").empty();
+                var columnCount = $('#transactionDataTable thead tr th').length;
+
+                if (data && data.length > 0) {
+                    data.forEach(function (item) {
+                        var statusClass = getStatusClass(item.status);
+
+                        var detailsBadge = item.detail_count > 0
+                            ? '<span class="badge badge-info">' + item.detail_count + ' items</span>'
+                            : '<span class="text-muted">—</span>';
+
+                        var poNoDisplay;
+                        if (!item.first_po_no) {
+                            poNoDisplay = '<span class="text-muted">—</span>';
+                        } else if (item.detail_count > 1) {
+                            poNoDisplay = item.first_po_no + ' <span class="text-muted">(+' + (item.detail_count - 1) + ' more)</span>';
+                        } else {
+                            poNoDisplay = item.first_po_no;
+                        }
+
+                        var row = `<tr>
+                            <td>${item.po_id || ''}</td>
+                            <td>${poNoDisplay}</td>
+                            <td>${item.company_code || ''}</td>
+                            <td>${item.currency || ''}</td>
+                            <td>${item.currency_rate || ''}</td>
+                            <td>${item.vendor || ''}</td>
+                            <td><span class="${statusClass}">${item.status || ''}</span></td>
+                            <td>${detailsBadge}</td>
+                            <td>${item.Remarks || ''}</td>
+                            <td>${formatDate(item.created_at) || ''}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="@Url.Action("Editor", "Operational")?id=${encodeURIComponent(item.po_id)}&mode=View"
+                                       class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="@Url.Action("Editor", "Operational")?id=${encodeURIComponent(item.po_id)}&mode=Edit"
+                                       class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="@Url.Action("Editor", "Operational")?id=${encodeURIComponent(item.po_id)}&mode=Delete"
+                                       class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>`;
+                        $("#transactionDetailTable").append(row);
+                    });
+                } else {
+                    $("#transactionDetailTable").append(
+                        '<tr><td colspan="' + columnCount + '" class="text-center">No Data found</td></tr>'
+                    );
+                }
+
+                initializeDataTable();
+
+                $('#tableSearch').off('keyup').on('keyup', function () {
+                    if (transactionTable) {
+                        transactionTable.search($(this).val()).draw();
+                    }
+                });
+
+                console.log("Operational table refreshed successfully");
+            },
+            error: function (xhr, status, error) {
+                console.error("Error refreshing operational table:", error);
+                if (typeof toastr !== 'undefined') {
+                    toastr.error("Error refreshing operational table");
+                }
+            }
+        });
+    }
+
+    function getStatusClass(status) {
+        if (!status) return "";
+        switch (status) {
+            case "New": return "badge badge-primary";
+            case "Send to AP": return "badge badge-success";
+            case "Cancel": return "badge badge-warning";
+            default: return "badge badge-light";
+        }
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return "";
+
+        try {
+            if (typeof dateString === 'string' && dateString.indexOf('/Date(') === 0) {
+                const timestamp = parseInt(dateString.substr(6));
+                const date = new Date(timestamp);
+                if (isNaN(date.getTime())) return "";
+
+                const year = date.getFullYear();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            } else {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return "";
+
+                const year = date.getFullYear();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+        } catch (e) {
+            console.error("Error parsing date:", e);
+            return "";
+        }
+    }
+</script>

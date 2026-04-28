@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Invoice";
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+<section class="content">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="input-group input-group-sm mr-2" style="width:200px;">
+                        <input type="text" id="tableSearch" class="form-control" placeholder="Search..." />
+                    </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body table-responsive p-0">
+            <table id="invoiceDetail" class="table table-hover text-nowrap">
+                <thead>
+                    <tr>
+                        <th>PO ID</th>
+                        <th>PO No</th>
+                        <th>Company</th>
+                        <th>Vendor</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                        <th>Created At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="invoiceDetailTable">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+
+</script>
