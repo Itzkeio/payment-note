@@ -1,0 +1,665 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DbPaymentNoteModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="company_code" />
+          </Key>
+          <Property Name="company_code" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="company_description" Type="varchar" MaxLength="255" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="ccy_code" />
+          </Key>
+          <Property Name="ccy_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ccy_description" Type="varchar" MaxLength="255" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="department_code" />
+          </Key>
+          <Property Name="department_code" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Role" Type="varchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="location_code" />
+          </Key>
+          <Property Name="location_code" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="location_name" Type="varchar" MaxLength="255" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="OperationalDetails">
+          <Key>
+            <PropertyRef Name="detail_id" />
+          </Key>
+          <Property Name="detail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="po_id" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="po_no" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="po_type" Type="varchar" MaxLength="50" />
+          <Property Name="po_date" Type="datetime" />
+          <Property Name="po_dept" Type="varchar" MaxLength="50" />
+          <Property Name="amount_dpp" Type="bigint" />
+          <Property Name="amount_vat" Type="bigint" />
+          <Property Name="amount_freight" Type="bigint" />
+          <Property Name="amount_freight_vat" Type="bigint" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+          <Property Name="remarks_item" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Operationals">
+          <Key>
+            <PropertyRef Name="po_id" />
+          </Key>
+          <Property Name="po_id" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="company_code" Type="varchar" MaxLength="50" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
+          <Property Name="currency_rate" Type="bigint" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="Remarks" Type="varchar" MaxLength="500" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+          <Property Name="vendor" Type="int" />
+        </EntityType>
+        <EntityType Name="po_type">
+          <Key>
+            <PropertyRef Name="type_code" />
+          </Key>
+          <Property Name="type_code" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="type_desc" Type="varchar" MaxLength="255" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="username" Type="varchar" MaxLength="255" />
+          <Property Name="first_name" Type="varchar" MaxLength="255" />
+          <Property Name="password" Type="varchar" MaxLength="255" />
+          <Property Name="location" Type="varchar" MaxLength="255" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="is_admin" Type="bit" />
+          <Property Name="Department" Type="varchar" MaxLength="255" />
+          <Property Name="Last_Login" Type="datetime" />
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DbPaymentNote.dbo.Users_Backup' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Users_Backup">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="255" />
+          <Property Name="first_name" Type="varchar" MaxLength="255" />
+          <Property Name="password" Type="varchar" MaxLength="255" />
+          <Property Name="location" Type="varchar" MaxLength="255" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="is_admin" Type="bit" />
+          <Property Name="Department" Type="varchar" MaxLength="255" />
+          <Property Name="Last_Login" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="vendor_id" />
+          </Key>
+          <Property Name="vendor_semesta_code" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="vendor_sap_code" Type="varchar" MaxLength="255" />
+          <Property Name="vendor_desc" Type="varchar" MaxLength="255" />
+          <Property Name="created_by" Type="varchar" MaxLength="100" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="edited_by" Type="varchar" MaxLength="100" />
+          <Property Name="edited_at" Type="datetime" />
+          <Property Name="deleted_by" Type="varchar" MaxLength="100" />
+          <Property Name="deleted_at" Type="datetime" />
+          <Property Name="deleted" Type="bit" />
+          <Property Name="vendor_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_OperationalDetails_Operationals">
+          <End Role="Operationals" Type="Self.Operationals" Multiplicity="1" />
+          <End Role="OperationalDetails" Type="Self.OperationalDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operationals">
+              <PropertyRef Name="po_id" />
+            </Principal>
+            <Dependent Role="OperationalDetails">
+              <PropertyRef Name="po_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Operationals_Vendors">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="Operationals" Type="Self.Operationals" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="vendor_id" />
+            </Principal>
+            <Dependent Role="Operationals">
+              <PropertyRef Name="vendor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DbPaymentNoteModel1StoreContainer">
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OperationalDetails" EntityType="Self.OperationalDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Operationals" EntityType="Self.Operationals" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="po_type" EntityType="Self.po_type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users_Backup" EntityType="Self.Users_Backup" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Users_Backup].[user_id] AS [user_id], 
+    [Users_Backup].[username] AS [username], 
+    [Users_Backup].[first_name] AS [first_name], 
+    [Users_Backup].[password] AS [password], 
+    [Users_Backup].[location] AS [location], 
+    [Users_Backup].[created_by] AS [created_by], 
+    [Users_Backup].[created_at] AS [created_at], 
+    [Users_Backup].[edited_by] AS [edited_by], 
+    [Users_Backup].[edited_at] AS [edited_at], 
+    [Users_Backup].[deleted_by] AS [deleted_by], 
+    [Users_Backup].[deleted_at] AS [deleted_at], 
+    [Users_Backup].[deleted] AS [deleted], 
+    [Users_Backup].[is_admin] AS [is_admin], 
+    [Users_Backup].[Department] AS [Department], 
+    [Users_Backup].[Last_Login] AS [Last_Login]
+    FROM [dbo].[Users_Backup] AS [Users_Backup]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_OperationalDetails_Operationals" Association="Self.FK_OperationalDetails_Operationals">
+            <End Role="Operationals" EntitySet="Operationals" />
+            <End Role="OperationalDetails" EntitySet="OperationalDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Operationals_Vendors" Association="Self.FK_Operationals_Vendors">
+            <End Role="Vendor" EntitySet="Vendor" />
+            <End Role="Operationals" EntitySet="Operationals" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DbPaymentNoteModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="company_code" />
+          </Key>
+          <Property Name="company_code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="company_description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="ccy_code" />
+          </Key>
+          <Property Name="ccy_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ccy_description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="department_code" />
+          </Key>
+          <Property Name="department_code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="location_code" />
+          </Key>
+          <Property Name="location_code" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="location_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="OperationalDetail">
+          <Key>
+            <PropertyRef Name="detail_id" />
+          </Key>
+          <Property Name="detail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="po_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="po_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="po_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="po_date" Type="DateTime" Precision="3" />
+          <Property Name="po_dept" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="amount_dpp" Type="Int64" />
+          <Property Name="amount_vat" Type="Int64" />
+          <Property Name="amount_freight" Type="Int64" />
+          <Property Name="amount_freight_vat" Type="Int64" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="remarks_item" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Operational" Relationship="Self.FK_OperationalDetails_Operationals" FromRole="OperationalDetails" ToRole="Operationals" />
+        </EntityType>
+        <EntityType Name="Operational">
+          <Key>
+            <PropertyRef Name="po_id" />
+          </Key>
+          <Property Name="po_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="company_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="currency_rate" Type="Int64" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="vendor" Type="Int32" />
+          <NavigationProperty Name="OperationalDetails" Relationship="Self.FK_OperationalDetails_Operationals" FromRole="Operationals" ToRole="OperationalDetails" />
+          <NavigationProperty Name="Vendor1" Relationship="Self.FK_Operationals_Vendors" FromRole="Operationals" ToRole="Vendor" />
+        </EntityType>
+        <EntityType Name="po_type">
+          <Key>
+            <PropertyRef Name="type_code" />
+          </Key>
+          <Property Name="type_code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="type_desc" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="first_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="is_admin" Type="Boolean" />
+          <Property Name="Department" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Last_Login" Type="DateTime" Precision="3" />
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="vendor_id" />
+          </Key>
+          <Property Name="vendor_semesta_code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="vendor_sap_code" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="vendor_desc" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="vendor_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Operationals" Relationship="Self.FK_Operationals_Vendors" FromRole="Vendor" ToRole="Operationals" />
+        </EntityType>
+        <EntityType Name="Users_Backup">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="first_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="edited_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="edited_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted_by" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="3" />
+          <Property Name="deleted" Type="Boolean" />
+          <Property Name="is_admin" Type="Boolean" />
+          <Property Name="Department" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Last_Login" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_OperationalDetails_Operationals">
+          <End Role="Operationals" Type="Self.Operational" Multiplicity="1" />
+          <End Role="OperationalDetails" Type="Self.OperationalDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operationals">
+              <PropertyRef Name="po_id" />
+            </Principal>
+            <Dependent Role="OperationalDetails">
+              <PropertyRef Name="po_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Operationals_Vendors">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="Operationals" Type="Self.Operational" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="vendor_id" />
+            </Principal>
+            <Dependent Role="Operationals">
+              <PropertyRef Name="vendor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DbPaymentNoteEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Companies" EntityType="Self.Company" />
+          <EntitySet Name="Currencies" EntityType="Self.Currency" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Locations" EntityType="Self.Location" />
+          <EntitySet Name="OperationalDetails" EntityType="Self.OperationalDetail" />
+          <EntitySet Name="Operationals" EntityType="Self.Operational" />
+          <EntitySet Name="po_type" EntityType="Self.po_type" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Vendors" EntityType="Self.Vendor" />
+          <EntitySet Name="Users_Backup" EntityType="Self.Users_Backup" />
+          <AssociationSet Name="FK_OperationalDetails_Operationals" Association="Self.FK_OperationalDetails_Operationals">
+            <End Role="Operationals" EntitySet="Operationals" />
+            <End Role="OperationalDetails" EntitySet="OperationalDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Operationals_Vendors" Association="Self.FK_Operationals_Vendors">
+            <End Role="Vendor" EntitySet="Vendors" />
+            <End Role="Operationals" EntitySet="Operationals" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DbPaymentNoteModel1StoreContainer" CdmEntityContainer="DbPaymentNoteEntities2">
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="company_code" ColumnName="company_code" />
+                <ScalarProperty Name="company_description" ColumnName="company_description" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Currencies">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.Currency">
+              <MappingFragment StoreEntitySet="Currency">
+                <ScalarProperty Name="ccy_code" ColumnName="ccy_code" />
+                <ScalarProperty Name="ccy_description" ColumnName="ccy_description" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="department_code" ColumnName="department_code" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.Location">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="location_code" ColumnName="location_code" />
+                <ScalarProperty Name="location_name" ColumnName="location_name" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OperationalDetails">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.OperationalDetail">
+              <MappingFragment StoreEntitySet="OperationalDetails">
+                <ScalarProperty Name="detail_id" ColumnName="detail_id" />
+                <ScalarProperty Name="po_id" ColumnName="po_id" />
+                <ScalarProperty Name="po_no" ColumnName="po_no" />
+                <ScalarProperty Name="po_type" ColumnName="po_type" />
+                <ScalarProperty Name="po_date" ColumnName="po_date" />
+                <ScalarProperty Name="po_dept" ColumnName="po_dept" />
+                <ScalarProperty Name="amount_dpp" ColumnName="amount_dpp" />
+                <ScalarProperty Name="amount_vat" ColumnName="amount_vat" />
+                <ScalarProperty Name="amount_freight" ColumnName="amount_freight" />
+                <ScalarProperty Name="amount_freight_vat" ColumnName="amount_freight_vat" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="remarks_item" ColumnName="remarks_item" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Operationals">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.Operational">
+              <MappingFragment StoreEntitySet="Operationals">
+                <ScalarProperty Name="po_id" ColumnName="po_id" />
+                <ScalarProperty Name="company_code" ColumnName="company_code" />
+                <ScalarProperty Name="currency" ColumnName="currency" />
+                <ScalarProperty Name="currency_rate" ColumnName="currency_rate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="vendor" ColumnName="vendor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="po_type">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.po_type">
+              <MappingFragment StoreEntitySet="po_type">
+                <ScalarProperty Name="type_code" ColumnName="type_code" />
+                <ScalarProperty Name="type_desc" ColumnName="type_desc" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="is_admin" ColumnName="is_admin" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Last_Login" ColumnName="Last_Login" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vendors">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.Vendor">
+              <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="vendor_semesta_code" ColumnName="vendor_semesta_code" />
+                <ScalarProperty Name="vendor_sap_code" ColumnName="vendor_sap_code" />
+                <ScalarProperty Name="vendor_desc" ColumnName="vendor_desc" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="vendor_id" ColumnName="vendor_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users_Backup">
+            <EntityTypeMapping TypeName="DbPaymentNoteModel1.Users_Backup">
+              <MappingFragment StoreEntitySet="Users_Backup">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="edited_by" ColumnName="edited_by" />
+                <ScalarProperty Name="edited_at" ColumnName="edited_at" />
+                <ScalarProperty Name="deleted_by" ColumnName="deleted_by" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="deleted" ColumnName="deleted" />
+                <ScalarProperty Name="is_admin" ColumnName="is_admin" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Last_Login" ColumnName="Last_Login" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

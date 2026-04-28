@@ -12,27 +12,31 @@ namespace PaymentNote.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Vendor
+    public partial class Operational
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Vendor()
+        public Operational()
         {
-            this.Operationals = new HashSet<Operational>();
+            this.OperationalDetails = new HashSet<OperationalDetail>();
         }
     
-        public string vendor_semesta_code { get; set; }
-        public string vendor_sap_code { get; set; }
-        public string vendor_desc { get; set; }
-        public string created_by { get; set; }
+        public string po_id { get; set; }
+        public string company_code { get; set; }
+        public string currency { get; set; }
+        public Nullable<long> currency_rate { get; set; }
+        public string status { get; set; }
+        public string Remarks { get; set; }
         public Nullable<System.DateTime> created_at { get; set; }
-        public string edited_by { get; set; }
+        public string created_by { get; set; }
         public Nullable<System.DateTime> edited_at { get; set; }
-        public string deleted_by { get; set; }
-        public Nullable<System.DateTime> deleted_at { get; set; }
+        public string edited_by { get; set; }
         public Nullable<bool> deleted { get; set; }
-        public int vendor_id { get; set; }
+        public Nullable<System.DateTime> deleted_at { get; set; }
+        public string deleted_by { get; set; }
+        public Nullable<int> vendor { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Operational> Operationals { get; set; }
+        public virtual ICollection<OperationalDetail> OperationalDetails { get; set; }
+        public virtual Vendor Vendor1 { get; set; }
     }
 }

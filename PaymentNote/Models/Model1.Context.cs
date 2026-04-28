@@ -13,10 +13,10 @@ namespace PaymentNote.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class DbPaymentNoteEntities1 : DbContext
+    public partial class DbPaymentNoteEntities2 : DbContext
     {
-        public DbPaymentNoteEntities1()
-            : base("name=DbPaymentNoteEntities1")
+        public DbPaymentNoteEntities2()
+            : base("name=DbPaymentNoteEntities2")
         {
         }
     
@@ -25,14 +25,15 @@ namespace PaymentNote.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Users_Backup> Users_Backup { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
+        public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
+        public virtual DbSet<OperationalDetail> OperationalDetails { get; set; }
+        public virtual DbSet<Operational> Operationals { get; set; }
         public virtual DbSet<po_type> po_type { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
-        public virtual DbSet<TransactionDetail> TransactionDetails { get; set; }
+        public virtual DbSet<Users_Backup> Users_Backup { get; set; }
     }
 }
