@@ -9,10 +9,10 @@ namespace PaymentNote.Services
 {
     public class UserServices : IUserServices
     {
-        private readonly DbPaymentNoteEntities1 _dbContext;
+        private readonly DbPaymentNoteEntities2 _dbContext;
         private readonly User db;
 
-        public UserServices(DbPaymentNoteEntities1 dbContext)
+        public UserServices(DbPaymentNoteEntities2 dbContext)
         {
             _dbContext = dbContext;
         }

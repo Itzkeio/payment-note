@@ -10,11 +10,11 @@ namespace PaymentNote.Controllers
 {
     public class VendorController : Controller
     {
-        private readonly DbPaymentNoteEntities1 db;
+        private readonly DbPaymentNoteEntities2 db;
 
         public VendorController()
         {
-            db = new DbPaymentNoteEntities1();
+            db = new DbPaymentNoteEntities2();
         }
 
         // GET: Vendor

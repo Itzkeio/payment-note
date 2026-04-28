@@ -10,11 +10,11 @@ namespace PaymentNote.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly DbPaymentNoteEntities1 _db;
+        private readonly DbPaymentNoteEntities2 _db;
 
         public DepartmentController()
         {
-            _db = new DbPaymentNoteEntities1();
+            _db = new DbPaymentNoteEntities2();
         }
         // GET: Department
         public ActionResult Index()

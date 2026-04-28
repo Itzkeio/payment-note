@@ -10,7 +10,7 @@ namespace PaymentNote.Controllers
 {
     public class LocationController : Controller
     {
-        private readonly DbPaymentNoteEntities1 db = new DbPaymentNoteEntities1();
+        private readonly DbPaymentNoteEntities2  db = new DbPaymentNoteEntities2();
 
         // GET: Location
         public ActionResult Index()

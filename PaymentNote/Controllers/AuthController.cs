@@ -12,16 +12,16 @@ namespace PaymentNote.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly DbPaymentNoteEntities1 _db;
+        private readonly DbPaymentNoteEntities2 _db;
         private readonly IUserServices _userServices;
 
         public AuthController()
         {
-            _db = new DbPaymentNoteEntities1();
+            _db = new DbPaymentNoteEntities2();
             _userServices = new UserServices(_db);
         }
 
-        public AuthController(IUserServices userServices, DbPaymentNoteEntities1 db)
+        public AuthController(IUserServices userServices, DbPaymentNoteEntities2 db)
         {
             _userServices = userServices;
             _db = db;

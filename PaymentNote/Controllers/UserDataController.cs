@@ -12,16 +12,16 @@ namespace PaymentNote.Controllers
 {
     public class UserDataController : Controller
     {
-        public readonly DbPaymentNoteEntities1 db;
+        public readonly DbPaymentNoteEntities2 db;
         public readonly IUserServices userServices;
 
         public UserDataController()
         {
-            this.db = new DbPaymentNoteEntities1();
+            this.db = new DbPaymentNoteEntities2();
             this.userServices = new UserServices(this.db);
         }
 
-        public UserDataController(DbPaymentNoteEntities1 db, IUserServices services)
+        public UserDataController(DbPaymentNoteEntities2 db, IUserServices services)
         {
             this.db = db;
             this.userServices = services;
